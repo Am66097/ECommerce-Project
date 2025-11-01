@@ -8,6 +8,7 @@ using E_Commerce.Services.Abstraction;
 using E_Commerce.Services.MappingProfiels;
 using E_CommerceProject.Extentions;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace E_CommerceProject
@@ -31,8 +32,15 @@ namespace E_CommerceProject
             builder.Services.AddScoped<IDataInitializer, DataInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
+            //builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
+            builder.Services.AddAutoMapper(typeof(ServiceAssemblyReferance).Assembly);
+
+            builder.Services.AddTransient<ProductPictureUrlResolver>();
+
             builder.Services.AddScoped<IProductService, ProductService>();
+
+
+
             #endregion
 
             var app = builder.Build();
@@ -53,6 +61,8 @@ namespace E_CommerceProject
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
