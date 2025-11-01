@@ -12,13 +12,13 @@ namespace E_Commerce.Persistance.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreDbContext _dbContext;
-        private Dictionary<Type, object> _repositories ;
+        private Dictionary<Type, object> _repositories = [] ; // [] => Equal null 
 
         public UnitOfWork(StoreDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>(TEntity entity) where TEntity : BaseEntity<TKey>
+        public IGenericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
            var EntityType = typeof(TEntity);
 
