@@ -3,6 +3,8 @@ using E_Commerce.Domain.Contracts;
 using E_Commerce.Persistance.Data.Contexts;
 using E_Commerce.Persistance.Data.DataSeed;
 using E_Commerce.Persistance.Repositories;
+using E_Commerce.Services;
+using E_Commerce.Services.Abstraction;
 using E_Commerce.Services.MappingProfiels;
 using E_CommerceProject.Extentions;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,7 @@ namespace E_CommerceProject
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
+            builder.Services.AddScoped<IProductService, ProductService>();
             #endregion
 
             var app = builder.Build();
