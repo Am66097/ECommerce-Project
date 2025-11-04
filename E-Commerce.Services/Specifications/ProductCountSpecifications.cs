@@ -11,9 +11,7 @@ namespace E_Commerce.Services.Specifications
     internal class ProductCountSpecifications : BaseSpecifications<Product,int>
     {
         public ProductCountSpecifications(ProductQueryParams queryParams) : 
-            base(p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId.Value)
-            && (!queryParams.TypeId.HasValue || p.TypeId == queryParams.TypeId.Value)
-            && (string.IsNullOrEmpty(queryParams.Search) || p.Name.ToLower().Contains(queryParams.Search.ToLower())))
+            base(ProductSpecificationsHelper.GetProductCriteria(queryParams))
         {
 
         }

@@ -19,10 +19,8 @@ namespace E_Commerce.Services.Specifications
         // p=>p.TypeId == typeId &&  p=>p.BrandId == brandId -> typeId and brandId are not null
 
         // search 
-        public ProductWithTypeAndBrandSpecification(ProductQueryParams queryParams) : base(
-            p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId.Value)
-            && (!queryParams.TypeId.HasValue || p.TypeId == queryParams.TypeId.Value)
-            && (string.IsNullOrEmpty(queryParams.Search) || p.Name.ToLower().Contains(queryParams.Search.ToLower())))
+        public ProductWithTypeAndBrandSpecification(ProductQueryParams queryParams) : base
+            (ProductSpecificationsHelper.GetProductCriteria(queryParams))
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);

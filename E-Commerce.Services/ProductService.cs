@@ -33,12 +33,14 @@ namespace E_Commerce.Services
         {
             //Specifications => get all products including product type and product brand 
             // and filter with brandid or typeid if you need it 
+            var Repo = _unitOfWork.GetRepository<Product, int>();
+
             var spec = new ProductWithTypeAndBrandSpecification(queryParams);
-            var Products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync(spec);
+            var Products = await Repo.GetAllAsync(spec);
             var DataToReturn= _mapper.Map<IEnumerable<ProductDTO>>(Products);
             var CountOfReturnedData = DataToReturn.Count();
             var CountSpec = new ProductCountSpecifications(queryParams);
-            var CountOfAllProducts = await _unitOfWork.GetRepository<Product, int>().CountAsync(CountSpec);
+            var CountOfAllProducts = await Repo.CountAsync(CountSpec);
             return new PaginatedResult<ProductDTO>(queryParams.PagerIndex, CountOfReturnedData, CountOfAllProducts, DataToReturn);
         
         
