@@ -13,7 +13,7 @@ namespace E_Commerce.Domain.Contracts
 
         public ICollection<Expression<Func<TEntity , object>>> IncludeExpression { get; } // For Includes Expressions 
 
-
+        public Expression<Func<TEntity,bool>> Criteria {  get; } // For Criteria 
 
     }
 }

@@ -17,6 +17,12 @@ namespace E_Commerce.Persistance
             var Query = EntryPoint;
             if(specifications is not null)
             {
+
+                if(specifications.Criteria is not null)
+                {
+                    Query = Query.Where(specifications.Criteria);
+                }
+
                 if(specifications.IncludeExpression is not null && specifications.IncludeExpression.Any())
                 {
                     Query = specifications.IncludeExpression.Aggregate(Query,(CurrentQuery,IncludeExp)=>

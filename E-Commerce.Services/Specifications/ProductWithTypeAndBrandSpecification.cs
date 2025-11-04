@@ -11,11 +11,18 @@ namespace E_Commerce.Services.Specifications
     {
 
         // Get All Products + Includes
-     public ProductWithTypeAndBrandSpecification() :base()
+     public ProductWithTypeAndBrandSpecification() :base(null!) // ! => مش عارف هنا صح ولا لاء 
         {
             AddInclude(p => p.ProductType);
             AddInclude(p=>p.ProductBrand);
         }
 
+        // Get Single Product By Id + Includes
+        public ProductWithTypeAndBrandSpecification(int id) : base(p=>p.Id==id)
+        {
+            AddInclude(p => p.ProductType);
+            AddInclude(p=>p.ProductBrand);
+
+        }
     }
 }

@@ -31,13 +31,17 @@ namespace E_Commerce.Persistance.Repositories
         public void Remove(TEntity entity) => _dbContext.Set<TEntity>().Remove(entity);
 
         public void Update(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
-        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications) // After Update
         {
             var Query = SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications);
             return await Query.ToListAsync();
            
         }
 
-
+        public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications) // After Update
+        {
+            var Query = SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications);
+            return await Query.FirstOrDefaultAsync();
+        }
     }
 }
