@@ -19,14 +19,34 @@ namespace E_Commerce.Services.Specifications
         // p=>p.TypeId == typeId &&  p=>p.BrandId == brandId -> typeId and brandId are not null
 
         // search 
-
         public ProductWithTypeAndBrandSpecification(ProductQueryParams queryParams) : base(
             p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId.Value)
             && (!queryParams.TypeId.HasValue || p.TypeId == queryParams.TypeId.Value)
-            &&(string.IsNullOrEmpty(queryParams.Search)|| p.Name.ToLower().Contains(queryParams.Search.ToLower())))
+            && (string.IsNullOrEmpty(queryParams.Search) || p.Name.ToLower().Contains(queryParams.Search.ToLower())))
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
+
+            switch (queryParams.Sort)
+            {
+                case ProductSortingOptions.NameAsc:
+                    AddOrderBy(p => p.Name);
+                    break;
+                case ProductSortingOptions.NameDesc:
+                    AddOrderByDescending(p => p.Name);
+                    break;
+                case ProductSortingOptions.PriceAsc:
+                    AddOrderBy(p => p.Price);
+                    break;
+                case ProductSortingOptions.PriceDesc:
+                    AddOrderByDescending(p => p.Price);
+                    break;
+                default:
+                    AddOrderBy(x => x.Id);
+                    break;
+            }
+
+            ApplyPagination(queryParams.PageSize, queryParams.PagerIndex);
         }
 
         // Get Single Product By Id + Includes
@@ -36,5 +56,7 @@ namespace E_Commerce.Services.Specifications
             AddInclude(p => p.ProductBrand);
 
         }
+
+
     }
 }

@@ -35,5 +35,47 @@ namespace E_Commerce.Services.Specifications
 
         #endregion
 
+        #region FOR Sorting 
+
+        // OrderBy
+        public Expression<Func<TEntity, object>> OrderBy { get; private set; }
+
+        protected void AddOrderBy(Expression<Func<TEntity, object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+
+
+        // OrderByDescending
+        public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
+
+      
+
+        protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescendingExpression)
+        {
+            OrderByDescending = orderByDescendingExpression;
+        }
+
+        #endregion
+
+        #region FOR Pagination
+
+
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPaginated { get; private set; }
+
+        protected void ApplyPagination(int pageSize,int pageIndex)
+        {
+
+            IsPaginated = true;
+            Take = pageSize;
+            Skip = (pageIndex - 1) * pageSize;
+        }
+
+        #endregion
+
     }
 }
