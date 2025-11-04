@@ -16,6 +16,7 @@ namespace E_Commerce.Domain.Contracts
 
         void Update(TEntity entity);
         void Remove(TEntity entity);
+        Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity,TKey> specifications);
 
 
     }
