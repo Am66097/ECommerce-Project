@@ -1,4 +1,5 @@
 ﻿using E_Commerce.Domain.Entities.ProductModule;
+using E_Commerce.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,12 @@ namespace E_Commerce.Services.Specifications
         // p=>p.TypeId == typeId -> typeId is not null
         // p=>p.TypeId == typeId &&  p=>p.BrandId == brandId -> typeId and brandId are not null
 
-        public ProductWithTypeAndBrandSpecification(int? brandId, int? typeId) : base(
-            p => (!brandId.HasValue || p.BrandId == brandId.Value)
-            && (!typeId.HasValue || p.TypeId == typeId.Value))
+        // search 
+
+        public ProductWithTypeAndBrandSpecification(ProductQueryParams queryParams) : base(
+            p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId.Value)
+            && (!queryParams.TypeId.HasValue || p.TypeId == queryParams.TypeId.Value)
+            &&(string.IsNullOrEmpty(queryParams.Search)|| p.Name.ToLower().Contains(queryParams.Search.ToLower())))
         {
             AddInclude(p => p.ProductType);
             AddInclude(p => p.ProductBrand);
