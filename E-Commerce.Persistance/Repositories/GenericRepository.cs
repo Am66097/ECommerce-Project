@@ -43,5 +43,10 @@ namespace E_Commerce.Persistance.Repositories
             var Query = SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications);
             return await Query.FirstOrDefaultAsync();
         }
+
+        public async Task<int> CountAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+           return await SpecificationsEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications).CountAsync();
+        }
     }
 }
