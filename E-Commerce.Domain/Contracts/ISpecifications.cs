@@ -15,5 +15,7 @@ namespace E_Commerce.Domain.Contracts
 
         public Expression<Func<TEntity,bool>> Criteria {  get; } // For Criteria 
 
+
+
     }
 }

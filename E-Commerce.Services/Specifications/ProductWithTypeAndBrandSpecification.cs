@@ -11,17 +11,25 @@ namespace E_Commerce.Services.Specifications
     {
 
         // Get All Products + Includes
-     public ProductWithTypeAndBrandSpecification() :base(null!) // ! => مش عارف هنا صح ولا لاء 
+
+        // And Addition a Filter for it :-
+        // p=>p.BrandId == brandId -> brandId is not null
+        // p=>p.TypeId == typeId -> typeId is not null
+        // p=>p.TypeId == typeId &&  p=>p.BrandId == brandId -> typeId and brandId are not null
+
+        public ProductWithTypeAndBrandSpecification(int? brandId, int? typeId) : base(
+            p => (!brandId.HasValue || p.BrandId == brandId.Value)
+            && (!typeId.HasValue || p.TypeId == typeId.Value))
         {
             AddInclude(p => p.ProductType);
-            AddInclude(p=>p.ProductBrand);
+            AddInclude(p => p.ProductBrand);
         }
 
         // Get Single Product By Id + Includes
-        public ProductWithTypeAndBrandSpecification(int id) : base(p=>p.Id==id)
+        public ProductWithTypeAndBrandSpecification(int id) : base(p => p.Id == id)
         {
             AddInclude(p => p.ProductType);
-            AddInclude(p=>p.ProductBrand);
+            AddInclude(p => p.ProductBrand);
 
         }
     }
