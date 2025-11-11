@@ -45,9 +45,13 @@ namespace E_CommerceProject
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
             });
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+            builder.Services.AddScoped<IBasketService, BasketService>();
 
             #endregion
 
+            #region Redis Connection
+
+            #endregion
             var app = builder.Build();
 
             #region Data Seeding - Pending Migations 
