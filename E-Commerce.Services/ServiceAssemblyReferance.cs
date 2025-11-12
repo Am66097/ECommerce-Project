@@ -8,5 +8,7 @@ namespace E_Commerce.Services
 {
     public class ServiceAssemblyReferance
     {
+
+        // الكلاس ده معمول عشان ناخده كحلقة وصل عشان نوصل من خلاله لل Layer بتاعته كلها 
     }
 }
