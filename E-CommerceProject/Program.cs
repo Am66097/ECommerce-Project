@@ -6,6 +6,7 @@ using E_Commerce.Persistance.Repositories;
 using E_Commerce.Services;
 using E_Commerce.Services.Abstraction;
 using E_Commerce.Services.MappingProfiels;
+using E_CommerceProject.CustomMiddleWares;
 using E_CommerceProject.Extentions;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -65,6 +66,27 @@ namespace E_CommerceProject
             #endregion
 
             #region Configure the HTTP request pipeline.
+
+            //app.Use(async (Context, Next) =>
+            //{
+            //    try
+            //    {
+            //        await Next.Invoke(Context);
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //        Context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            //        await Context.Response.WriteAsJsonAsync(new
+            //        {
+            //            StatusCode = StatusCodes.Status500InternalServerError,
+            //            Error = $" An Unexpected Error Occurred : {ex.Message}"
+            //        });
+            //    }
+            //});
+
+            app.UseMiddleware<ExceptionHandlerMiddleWare>();
 
             if (app.Environment.IsDevelopment())
             {
