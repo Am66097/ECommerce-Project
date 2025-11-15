@@ -8,6 +8,8 @@ using E_Commerce.Services.Abstraction;
 using E_Commerce.Services.MappingProfiels;
 using E_CommerceProject.CustomMiddleWares;
 using E_CommerceProject.Extentions;
+using E_CommerceProject.Factories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using System.Reflection;
@@ -50,7 +52,11 @@ namespace E_CommerceProject
             builder.Services.AddScoped<IBasketService, BasketService>();
             builder.Services.AddScoped<ICacheRepository, CacheRepository>();
             builder.Services.AddScoped<ICacheService, CacheService>();
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.GenerateApiValidationResponse;
 
+            });
             #endregion
 
             #region Redis Connection
