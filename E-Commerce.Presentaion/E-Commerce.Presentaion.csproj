@@ -16,5 +16,9 @@
 
 
 	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.Runtime" Version="4.3.0" />
+	</ItemGroup>
 	
 </Project>
