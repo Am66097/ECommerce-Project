@@ -6,7 +6,10 @@ using E_Commerce.Persistance.Repositories;
 using E_Commerce.Services;
 using E_Commerce.Services.Abstraction;
 using E_Commerce.Services.MappingProfiels;
+using E_CommerceProject.CustomMiddleWares;
 using E_CommerceProject.Extentions;
+using E_CommerceProject.Factories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using System.Reflection;
@@ -44,9 +47,16 @@ namespace E_CommerceProject
             {
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
             });
+
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
             builder.Services.AddScoped<IBasketService, BasketService>();
+            builder.Services.AddScoped<ICacheRepository, CacheRepository>();
+            builder.Services.AddScoped<ICacheService, CacheService>();
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = ApiResponseFactory.GenerateApiValidationResponse;
 
+            });
             #endregion
 
             #region Redis Connection
@@ -62,6 +72,27 @@ namespace E_CommerceProject
             #endregion
 
             #region Configure the HTTP request pipeline.
+
+            //app.Use(async (Context, Next) =>
+            //{
+            //    try
+            //    {
+            //        await Next.Invoke(Context);
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //        Context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            //        await Context.Response.WriteAsJsonAsync(new
+            //        {
+            //            StatusCode = StatusCodes.Status500InternalServerError,
+            //            Error = $" An Unexpected Error Occurred : {ex.Message}"
+            //        });
+            //    }
+            //});
+
+            app.UseMiddleware<ExceptionHandlerMiddleWare>();
 
             if (app.Environment.IsDevelopment())
             {
