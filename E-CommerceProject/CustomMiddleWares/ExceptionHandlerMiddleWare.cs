@@ -1,4 +1,5 @@
-﻿using E_Commerce.Services.Exceptions;
+﻿using Azure;
+using E_Commerce.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_CommerceProject.CustomMiddleWares
@@ -48,16 +49,16 @@ namespace E_CommerceProject.CustomMiddleWares
 
         private static async Task HandleNotFoundEndPointAsync(HttpContext httpcontext)
         {
-            if (httpcontext.Response.StatusCode == StatusCodes.Status404NotFound)
+            if (httpcontext.Response.StatusCode == StatusCodes.Status404NotFound && !httpcontext.Response.HasStarted)
             {
-                var Problem = new ProblemDetails()
+                var Response = new ProblemDetails()
                 {
                     Title = "Error Will Processing The Http Request - EndPoint Not Found !",
                     Status = StatusCodes.Status404NotFound,
                     Detail = $"EndPoint {httpcontext.Request.Path} Not Found",
                     Instance = httpcontext.Request.Path
                 };
-                await httpcontext.Response.WriteAsJsonAsync(Problem);
+                await httpcontext.Response.WriteAsJsonAsync(Response);
             }
         }
     }

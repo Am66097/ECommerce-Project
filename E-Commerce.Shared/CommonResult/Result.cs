@@ -44,17 +44,29 @@ namespace E_Commerce.Shared.CommonResult
         {
             _value = value;
         }
+
         //Fail With Error With Value 
         public Result(Error error) : base()
         {
             _value = default!;
         }
+
         //Fail With List<Error> With Value 
         public Result(List<Error> errors) : base()
         {
             _value = default!;
 
         }
+
+        public static Result<TValue> OK(TValue value) => new Result<TValue>(value);
+        public static  Result<TValue> Fail(Error error) => new Result<TValue>(error);
+        public static  Result<TValue> Fail(List<Error> errors) => new Result<TValue>(errors);
+
+
+        public static implicit operator Result<TValue>(TValue value) => OK(value);
+        public static implicit operator Result<TValue>(Error error) => Fail(error);
+        public static implicit operator Result<TValue>(List<Error> errors) => Fail(errors);
+
 
     }
 }
