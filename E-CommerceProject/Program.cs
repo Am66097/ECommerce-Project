@@ -1,8 +1,10 @@
 
 using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.IdentityModule;
 using E_Commerce.Persistance.Data.Contexts;
 using E_Commerce.Persistance.Data.DataSeed;
 using E_Commerce.Persistance.IdentityData.DbContexts;
+using E_Commerce.Persistance.IdentityData.IdentityData;
 using E_Commerce.Persistance.Repositories;
 using E_Commerce.Services;
 using E_Commerce.Services.Abstraction;
@@ -10,6 +12,7 @@ using E_Commerce.Services.MappingProfiels;
 using E_CommerceProject.CustomMiddleWares;
 using E_CommerceProject.Extentions;
 using E_CommerceProject.Factories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -34,7 +37,9 @@ namespace E_CommerceProject
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+            builder.Services.AddKeyedScoped<IDataInitializer, DataInitializer>("Default");
+            builder.Services.AddKeyedScoped<IDataInitializer, IdentityDataInitializer>("Identity");
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
@@ -65,6 +70,10 @@ namespace E_CommerceProject
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             
             });
+
+            builder.Services.AddIdentityCore<ApplicationUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StoreIdentityDbContext>();
             #endregion
 
             #region Redis Connection
@@ -77,12 +86,13 @@ namespace E_CommerceProject
             await app.MigrateDatabaseAsync(); // Method In Extention Folder In E-Commerce.Web
             await app.MigrateIdentityDatabaseAsync(); // Method In Extention Folder In E-Commerce.Web
             await app.SeedDatabaseAsync();    // Method In Extention Folder In E-Commerce.Web
+            await app.SeedIdentityDatabaseAsync();    // Method In Extention Folder In E-Commerce.Web
 
             #endregion
 
             #region Configure the HTTP request pipeline.
 
-            
+
 
             app.UseMiddleware<ExceptionHandlerMiddleWare>();
 
