@@ -74,6 +74,7 @@ namespace E_CommerceProject
             builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<StoreIdentityDbContext>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             #endregion
 
             #region Redis Connection
