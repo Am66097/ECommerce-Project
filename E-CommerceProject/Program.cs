@@ -2,6 +2,7 @@
 using E_Commerce.Domain.Contracts;
 using E_Commerce.Persistance.Data.Contexts;
 using E_Commerce.Persistance.Data.DataSeed;
+using E_Commerce.Persistance.IdentityData.DbContexts;
 using E_Commerce.Persistance.Repositories;
 using E_Commerce.Services;
 using E_Commerce.Services.Abstraction;
@@ -57,6 +58,13 @@ namespace E_CommerceProject
                 options.InvalidModelStateResponseFactory = ApiResponseFactory.GenerateApiValidationResponse;
 
             });
+
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>  
+            {
+            
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            
+            });
             #endregion
 
             #region Redis Connection
@@ -67,30 +75,14 @@ namespace E_CommerceProject
             #region Data Seeding - Pending Migations 
 
             await app.MigrateDatabaseAsync(); // Method In Extention Folder In E-Commerce.Web
+            await app.MigrateIdentityDatabaseAsync(); // Method In Extention Folder In E-Commerce.Web
             await app.SeedDatabaseAsync();    // Method In Extention Folder In E-Commerce.Web
 
             #endregion
 
             #region Configure the HTTP request pipeline.
 
-            //app.Use(async (Context, Next) =>
-            //{
-            //    try
-            //    {
-            //        await Next.Invoke(Context);
-
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine(ex.Message);
-            //        Context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            //        await Context.Response.WriteAsJsonAsync(new
-            //        {
-            //            StatusCode = StatusCodes.Status500InternalServerError,
-            //            Error = $" An Unexpected Error Occurred : {ex.Message}"
-            //        });
-            //    }
-            //});
+            
 
             app.UseMiddleware<ExceptionHandlerMiddleWare>();
 
