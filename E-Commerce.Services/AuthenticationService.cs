@@ -82,8 +82,8 @@ namespace E_Commerce.Services
 
             var Token = new JwtSecurityToken
                 (
-                issuer: _configuration["JWTOptions: Issuer"],
-                audience: _configuration["JWTOptions: Audience"],
+                issuer: _configuration["JWTOptions:Issuer"],
+                audience: _configuration["JWTOptions:Audience"],
                 expires: DateTime.UtcNow.AddHours(1),
                 claims: Claims,
                 signingCredentials: SigningCredentials
