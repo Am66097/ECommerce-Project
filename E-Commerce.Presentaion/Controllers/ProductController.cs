@@ -2,6 +2,7 @@
 using E_Commerce.Services.Abstraction;
 using E_Commerce.Shared;
 using E_Commerce.Shared.DTOs.ProductDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,9 +13,8 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Presentaion.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductController :ControllerBase
+  
+    public class ProductController :ApiBaseController
     {
         private readonly IProductService _productService;
 
@@ -25,6 +25,7 @@ namespace E_Commerce.Presentaion.Controllers
 
         //GetAllProducts
         //Get : BaseUrl/api/Products
+        [Authorize]
         [HttpGet]
         [RedisCache]
         public async Task<ActionResult<PaginatedResult<ProductDTO>>> GetAllProducts([FromQuery] ProductQueryParams queryParams) 
@@ -39,9 +40,10 @@ namespace E_Commerce.Presentaion.Controllers
         public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
             //throw new Exception();
-            var Product = await _productService.GetProductByIdAsync(id);
+            var Result = await _productService.GetProductByIdAsync(id);
            
-            return Ok(Product);
+            return HandleResult<ProductDTO>(Result);
+
         }
 
         //GetAllProductTypes
