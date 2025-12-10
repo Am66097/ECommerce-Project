@@ -1,5 +1,6 @@
 ﻿using E_Commerce.Domain.Contracts;
 using E_Commerce.Domain.Entities;
+using E_Commerce.Domain.Entities.OrderModule;
 using E_Commerce.Domain.Entities.ProductModule;
 using E_Commerce.Persistance.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,10 @@ namespace E_Commerce.Persistance.Data.DataSeed
                 var HasProudcts = await _dbContext.Products.AnyAsync();
                 var HasBrands = await _dbContext.ProductBrands.AnyAsync();
                 var HasTypes = await _dbContext.ProductTypes.AnyAsync();
+                var HasDeliveryMethods = await _dbContext.Set<DeliveryMethod>().AnyAsync();
 
-                if (HasProudcts && HasBrands && HasTypes) return;
+
+                if (HasProudcts && HasBrands && HasTypes && HasDeliveryMethods) return;
 
                 if (!HasBrands)
                     await seedDataFromJsonFilesAsync<ProductBrand, int>("brands.json", _dbContext.ProductBrands);
@@ -40,6 +43,10 @@ namespace E_Commerce.Persistance.Data.DataSeed
                 await _dbContext.SaveChangesAsync();
                 if (!HasProudcts)
                     await seedDataFromJsonFilesAsync<Product, int>("products.json", _dbContext.Products);
+                if (!HasDeliveryMethods) // الي الان لم يتم وضع ملف ال (json الخاص بطرق التوصيل)
+                    await seedDataFromJsonFilesAsync<DeliveryMethod, int>("delivery.json", _dbContext.Set<DeliveryMethod>());
+
+
                 await _dbContext.SaveChangesAsync();
 
             }
